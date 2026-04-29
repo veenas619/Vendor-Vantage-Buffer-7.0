@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Control Center | Vendor Vantage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .v-token-badge { background:rgba(46,204,113,0.1);border:1px solid #2ecc71;color:#2ecc71;padding:8px 14px;border-radius:8px;font-size:0.9rem;font-weight:600;margin-top:8px;text-align:center; }
+        .status-pill { padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:700; }
+        .pill-PENDING  { background:rgba(255,159,67,0.15);color:#ff9f43;border:1px solid #ff9f43; }
+        .pill-ACCEPTED { background:rgba(52,152,219,0.15);color:#3498db;border:1px solid #3498db; }
+        .pill-READY    { background:rgba(46,204,113,0.15);color:#2ecc71;border:1px solid #2ecc71; }
+        .pill-COLLECTED{ background:rgba(150,150,150,0.15);color:#888;border:1px solid #888; }
+        .pill-DECLINED { background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid #e74c3c; }
+        .btn-accept  { background:#2ecc71;color:white; }
+        .btn-decline { background:#e74c3c;color:white; }
+        .btn-done    { background:#3498db;color:white; }
+        .btn-collect { background:#9b59b6;color:white; }
+        .order-count-badge { background:#ff9f43;color:black;padding:2px 8px;border-radius:10px;font-size:0.8rem;margin-left:8px; }
+        .section-hidden { display:none; }
+        .v-queue-container { max-height:520px;overflow-y:auto;padding-right:4px; }
+        .route-actions { display:flex;gap:10px;margin-top:20px; }
+        .vertical-route { padding: 8px 0 8px 8px; }
+    </style>
+</head>
+<body class="vendor-body">
+    <div class="vendor-wrapper">
+        <nav class="vendor-sidebar">
+            <div class="v-profile">
+                <div class="v-avatar">🚚</div>
+                <h2 id="v-biz-name">Vendor Hub</h2>
+                <p id="v-key-display" style="color:#95a5a6;font-size:11px;margin-top:4px"></p>
+                <div class="v-token-badge">💰 <span id="v-wallet">0</span> tokens earned</div>
+            </div>
+            <ul class="v-nav">
+                <li class="active" onclick="showSection('controls',this)">📍 Live Controls</li>
+                <li onclick="showSection('orders',this)">📦 All Orders</li>
+                <li class="logout-item"><a href="index.html" style="color:inherit;text-decoration:none">🚪 Exit Session</a></li>
+            </ul>
+        </nav>
+
+        <main class="v-main">
+            <div class="v-header">
+                <h1 id="v-welcome">Vendor Control Center</h1>
+                <!-- BUG 4 FIX: End Day Early button renders here -->
+                <div id="endDayContainer"></div>
+            </div>
+
+            <!-- CONTROLS SECTION -->
+            <div id="section-controls">
+                <div class="v-grid">
+                    <div class="v-card tile">
+                        <h3>🗺️ Route Roadmap</h3>
+                        <div id="vertical-route" class="vertical-route"></div>
+                        <div class="route-actions" id="routeActions">
+                            <button id="v-depart" class="v-btn depart">🚗 Depart Current Location</button>
+                            <button id="v-reach"  class="v-btn reach" style="display:none">📍 Reached Next Location</button>
+                        </div>
+                    </div>
+
+                    <div class="v-card tile">
+                        <h3>📬 Incoming Orders <span class="order-count-badge" id="order-count">0</span></h3>
+                        <!-- BUG 3 FIX: Spacious queue container -->
+                        <div id="v-queue" class="v-queue-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALL ORDERS SECTION -->
+            <!-- BUG 7 FIX: More spacious full order display -->
+            <div id="section-orders" class="section-hidden">
+                <div class="v-card" style="max-width:760px">
+                    <h3>📦 All Orders</h3>
+                    <h4 style="color:#f39c12;margin:20px 0 12px;font-size:1rem;border-bottom:1px solid #333;padding-bottom:8px">
+                        ⏳ Pending / Accepted
+                    </h4>
+                    <div id="fullPendingList"></div>
+                    <h4 style="color:#2ecc71;margin:24px 0 12px;font-size:1rem;border-bottom:1px solid #333;padding-bottom:8px">
+                        ✅ Ready for Collection
+                    </h4>
+                    <div id="fullReadyList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

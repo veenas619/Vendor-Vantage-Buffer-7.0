@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Auth | Vendor Vantage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* 1. LAYOUT TWEAKS */
+    body {
+        background: #0c0c0e; /* Dark background to match your theme */
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Allows scrolling from the top */
+        min-height: 100vh;
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 480px; /* Slimmer, professional look */
+        margin: 40px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    /* 2. TAB BUTTONS */
+    .auth-tabs { display: flex; gap: 10px; margin-bottom: 24px; }
+    .tab-btn { 
+        flex: 1; padding: 10px; border: 1px solid #444; 
+        background: transparent; color: #888; border-radius: 12px; 
+        cursor: pointer; font-family: 'Poppins', sans-serif; 
+        font-weight: 600; transition: 0.3s; 
+    }
+    .tab-btn.active { border-color: #ff9f43; color: #ff9f43; background: rgba(255,159,67,0.1); }
+
+    /* 3. INPUT ROWS (Tightened for visibility) */
+    .stop-row, .menu-row { 
+        display: flex; gap: 8px; margin-bottom: 10px; align-items: center; 
+    }
+    .stop-row input, .menu-row input { 
+        background: rgba(0,0,0,0.2); border: 1px solid #333; 
+        color: white; padding: 8px 12px; border-radius: 8px; 
+        font-size: 0.9rem;
+    }
+
+    /* 4. BUTTONS */
+    .small-btn { 
+        background: none; color: #ff9f43; border: 1px solid #ff9f43; 
+        padding: 6px 12px; border-radius: 8px; cursor: pointer; 
+        font-size: 0.8rem; margin-top: 5px;
+    }
+    .remove-btn { color: #e74c3c; background: none; border: none; cursor: pointer; font-weight: bold; }
+
+    .auth-btn { 
+        width: 100%; background: #ff9f43; color: black; 
+        border: none; padding: 14px; border-radius: 12px; 
+        font-weight: 700; cursor: pointer; margin-top: 25px;
+    }
+
+    h2 { color: white; margin-bottom: 5px; font-size: 1.5rem; }
+    .section-label { color: #ff9f43; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px; }
+    label { color: #888; font-size: 0.8rem; display: block; margin-bottom: 5px; }
+    
+    /* Scrollbar Styling for long registration forms */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+</style>
+</head>
+<body>
+    <div class="auth-container">
+        <a href="index.html" style="color:#ff9f43;text-decoration:none;margin-bottom:20px;display:inline-block">← Back to Market</a>
+
+        <div class="auth-tabs">
+            <button class="tab-btn active" id="loginTab" onclick="showTab('login')">🔑 Login</button>
+            <button class="tab-btn" id="registerTab" onclick="showTab('register')">🚚 Register</button>
+        </div>
+
+        <!-- LOGIN PANEL -->
+        <div id="loginPanel">
+            <h2>🚚 Vendor Login</h2>
+            <p style="color:#95a5a6;margin-bottom:16px">Registered vendors — log straight in.</p>
+            <div id="loginError" class="auth-error" style="display:none"></div>
+            <div class="input-group">
+                <label>Vendor Key</label>
+                <input type="text" id="loginKey" placeholder="e.g. vicky  /  sai  /  pizza">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="loginPw" placeholder="Your vendor password">
+            </div>
+            <button class="auth-btn" id="loginBtn">Login →</button>
+            <p class="hint" style="margin-top:14px">Demo: <b>vicky / vicky123</b> &nbsp;|&nbsp; <b>sai / sai123</b> &nbsp;|&nbsp; <b>pizza / pizza123</b></p>
+        </div>
+
+        <!-- REGISTER PANEL -->
+        <div id="registerPanel" style="display:none">
+            <h2>🚚 New Vendor Registration</h2>
+            <p style="color:#95a5a6;margin-bottom:16px">Fill in your details to join Vendor Vantage.</p>
+            <div id="regError" class="auth-error" style="display:none"></div>
+            <div id="regSuccess" class="auth-success" style="display:none"></div>
+
+            <div class="input-group">
+                <label>Business / Stall Name</label>
+                <input type="text" id="regName" placeholder="e.g. Raju Momo Corner">
+            </div>
+            <div class="input-group">
+                <label>Password (min 4 chars)</label>
+                <input type="password" id="regPw" placeholder="Choose a password">
+            </div>
+
+            <div class="section-label">📍 Add Your Stops</div>
+            <div id="stopsArea"></div>
+            <button type="button" class="small-btn" onclick="addStopRow()">+ Add Stop</button>
+
+            <div class="section-label" style="margin-top:16px">🍽️ Menu Items</div>
+            <div id="menuArea"></div>
+            <button type="button" class="small-btn" onclick="addMenuRow()">+ Add Item</button>
+
+            <button class="auth-btn" id="regBtn" style="margin-top:20px">Register →</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            document.getElementById('loginPanel').style.display    = tab === 'login'    ? '' : 'none';
+            document.getElementById('registerPanel').style.display = tab === 'register' ? '' : 'none';
+            document.getElementById('loginTab').className    = 'tab-btn' + (tab === 'login'    ? ' active' : '');
+            document.getElementById('registerTab').className = 'tab-btn' + (tab === 'register' ? ' active' : '');
+        }
+
+        function addStopRow() {
+            const row = document.createElement('div');
+            row.className = 'stop-row';
+            row.innerHTML = `
+                <input type="text"   placeholder="Location name" class="stop-name" style="flex:2">
+                <input type="number" placeholder="Stay (min)"    class="stop-stay"   style="max-width:90px" value="15">
+                <input type="number" placeholder="Travel (min)"  class="stop-travel" style="max-width:90px" value="10">
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+            document.getElementById('stopsArea').appendChild(row);
+        }
+
+        function addMenuRow() {
+            const row = document.createElement('div');
+            row.className = 'menu-row';
+            row.innerHTML = `
+                <input type="text"   placeholder="Item name e.g. Momos" class="menu-name">
+                <input type="number" placeholder="Price ₹"              class="menu-price" style="max-width:100px">
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">✕</button>`;
+            document.getElementById('menuArea').appendChild(row);
+        }
+
+        // Add one default row each
+        addStopRow(); addMenuRow();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

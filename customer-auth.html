@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login | Vendor Vantage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-error { background:rgba(231,76,60,0.15); border:1px solid #e74c3c; color:#e74c3c; padding:10px 14px; border-radius:8px; margin-bottom:12px; font-size:0.9rem; }
+        .input-group label { color:#95a5a6; font-size:0.85rem; display:block; margin-bottom:6px; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <a href="index.html" style="color:#ff9f43;text-decoration:none;margin-bottom:20px;display:inline-block">← Back to Market</a>
+        <h2>🍔 Foodie Login</h2>
+        <p style="color:#95a5a6;margin-bottom:16px">Start tracking authorized vendors in Pune.</p>
+        <div id="custError" class="auth-error" style="display:none"></div>
+        <div class="input-group">
+            <label>Your Name</label>
+            <input type="text" id="custName" placeholder="Enter your full name">
+        </div>
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" id="custEmail" placeholder="name@example.com">
+        </div>
+        <div class="input-group">
+            <label>Watch Area</label>
+            <select id="custArea">
+                <option value="karve road">Karve Road</option>
+                <option value="kothrud">Kothrud</option>
+                <option value="cummins">Cummins College</option>
+                <option value="ideal colony">Ideal Colony</option>
+                <option value="mit college">MIT College</option>
+                <option value="vanaz">Vanaz</option>
+                <option value="pune camp">Pune Camp</option>
+                <option value="swargate">Swargate</option>
+                <option value="shivajinagar">Shivajinagar</option>
+            </select>
+        </div>
+        <button class="auth-btn" id="custLoginBtn">Start Tracking →</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

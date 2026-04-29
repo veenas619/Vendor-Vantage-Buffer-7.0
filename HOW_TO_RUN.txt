@@ -1,0 +1,24 @@
+=== HOW TO RUN VENDOR VANTAGE ===
+
+STEP 1 — Open PowerShell and go to this folder:
+  cd path\to\VendorVantage_v3
+
+STEP 2 — Compile (run once):
+  javac Node.java QueueNode.java Order.java Queue.java ReviewNode.java ReviewStack.java Wallet.java Vendor.java ETACalculator.java SearchEngine.java Server.java
+
+STEP 3 — Start the server:
+  java Server
+
+  You should see: "Server running on http://localhost:8080"
+  Keep this window open.
+
+STEP 4 — Open index.html in your browser (double-click it)
+
+=== DEMO VENDOR ACCOUNTS ===
+  Key: vicky   Password: vicky123
+  Key: sai     Password: sai123
+  Key: pizza   Password: pizza123
+
+=== FEATURES ===
+  Vendor: Login/Register, update route, accept orders, mark food ready
+  Customer: Search vendors, multi-item cart, wallet (start with 500 tokens), order tracking, reviews
